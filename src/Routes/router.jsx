@@ -7,6 +7,7 @@ import Error404 from '../Pages/Error404/Error404';
 import ForgotPassword from '../Pages/Authentication/ForgotPassword';
 import Register from '../Pages/Authentication/Register';
 import Login from '../Pages/Authentication/Login';
+import LoginPage from '../Pages/Authentication/Login';
 
 const router = createBrowserRouter([
     {
@@ -21,23 +22,16 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: '/auth',
-        Component: AuthLayout,
-        hydrateFallbackElement: <p>Auth load nitese ubaa</p>,
-        children: [
-            {
-                path: 'login',
-                Component: Login,
-            },
-            {
-                path: 'register',
-                Component: Register,
-            },
-            {
-                path: 'forgot-password',
-                Component: ForgotPassword,
-            }
-        ]
+        path: '/login',
+        Component: Login,
+    },
+    {
+        path: '/register',
+        Component: Register,
+    },
+    {
+        path: '/forgot-password',
+        Component: ForgotPassword,
     },
     {
         path: '/*',
