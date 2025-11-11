@@ -22,8 +22,8 @@ const Navbar = () => {
     const getActiveClass = ({ isActive }) => {
         return (
             isActive
-                ? 'border-b-4 border-primary rounded py-0.5'
-                : 'border-b-4 border-transparent rounded py-0.5'
+                ? 'border-b-4 border-primary py-0.5'
+                : 'border-b-4 border-transparent py-0.5'
         )
     }
 
@@ -72,7 +72,7 @@ const Navbar = () => {
                     </Link>
                 </div>
                 <div className="navbar-center hidden md:flex">
-                    <ul className="flex items-center gap-8 font-medium *:hover:border-2 *:border-primary *:hover:px-4 *:py-1 *:rounded-sm transition-all duration-100 ease-in-out ">
+                    <ul className="flex items-center gap-8 font-medium *:hover:border-b-4 *:hover:border-primary *:border-transparent transition-all duration-200 ease-in-out ">
                         {/* <li className='relative hover:border-2 border-[#632EE3] hover:px-4 py-1 rounded-sm transition-all duration-100 ease-in-out' >
                             <NavLink to='/'>Home</NavLink>
                         </li>

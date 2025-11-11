@@ -3,6 +3,7 @@ import { Outlet } from 'react-router';
 import Navbar from '../Components/Header/Navbar';
 import Footer from '../Components/Footer/Footer';
 import { Toaster } from 'react-hot-toast';
+import ScrollToTop from '../Utilities/ScrollToTop';
 
 const HomeLayout = () => {
 
@@ -23,6 +24,7 @@ const HomeLayout = () => {
               position="top-center"
               reverseOrder={false}
             />
+            <ScrollToTop />
         </div>
     );
 };

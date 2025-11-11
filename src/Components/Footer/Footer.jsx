@@ -4,9 +4,13 @@ import { FaFacebook, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { IoLogoGithub } from 'react-icons/io';
 import { MdKeyboardDoubleArrowUp } from "react-icons/md";
 import { Link } from 'react-router';
-import ScrollToTop from '../../Utilities/ScrollToTop';
 
 const Footer = () => {
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className='relative bg-green-950 py-20'>
             <div className='md:flex max-w-[1536px] mx-auto px-4 gap-20'>
@@ -57,7 +61,7 @@ const Footer = () => {
                         </a>
                     </div>
                     <div>
-                        <button onClick={() => ScrollToTop()} className='btn bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-content active:translate-y-0.5 '> <MdKeyboardDoubleArrowUp className='text-xl' />   Back To Top</button>
+                        <button onClick={scrollToTop} className='btn bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-content active:translate-y-0.5 '> <MdKeyboardDoubleArrowUp className='text-xl' />   Back To Top</button>
                     </div>
                 </div>
                 {/* Right */}
