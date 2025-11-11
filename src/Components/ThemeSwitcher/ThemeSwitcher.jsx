@@ -6,45 +6,51 @@ const darkTheme = "bt-dark";
 
 const ThemeSwitcher = () => {
 
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? savedTheme : lightTheme;
-  });
+    const getInitialTheme = () => localStorage.getItem('theme') || lightTheme
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    const [theme, setTheme] = useState(getInitialTheme);
 
-  const handleThemeToggle = () => {
-    setTheme((prevTheme) => 
-      prevTheme === lightTheme ? darkTheme : lightTheme
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const handleThemeToggle = () => {
+        setTheme((prevTheme) =>
+            prevTheme === lightTheme ? darkTheme : lightTheme
+        );
+    };
+
+    return (
+        <label className="swap swap-rotate">
+
+            {/* This hidden checkbox's "checked" state is tied to our React state */}
+            <input
+                type="checkbox"
+                className='theme-controller'
+                onChange={handleThemeToggle}
+                checked={theme === darkTheme}
+            />
+
+            {/* sun icon */}
+            <svg
+                className="swap-off h-10 w-10 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24">
+                <path
+                    d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+            </svg>
+
+            {/* moon icon */}
+            <svg
+                className="swap-on h-10 w-10 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24">
+                <path
+                    d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+            </svg>
+        </label>
     );
-  };
-
-  return (
-    // DaisyUI's "swap" component is a styled checkbox, perfect for this.
-    // It handles the sun/moon icon switching CSS for us.
-    <label className="swap swap-rotate btn btn-ghost btn-circle">
-      
-      {/* This hidden checkbox's "checked" state is tied to our React state */}
-      <input 
-        type="checkbox" 
-        onChange={handleThemeToggle}
-        checked={theme === darkTheme} 
-      />
-      
-      {/* Sun icon (when "checked" is false) */}
-      <svg className="swap-off fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M5.64,17l-1.41-1.41L6.36,13.46l1.41,1.41L5.64,17ZM12,2A1,1,0,0,0,11,3V6a1,1,0,0,0,2,0V3A1,1,0,0,0,12,2ZM18.36,13.46l1.41,1.41L17,17l-1.41-1.41L18.36,13.46ZM21,11H18a1,1,0,0,0,0,2h3a1,1,0,0,0,0-2ZM11,18v3a1,1,0,0,0,2,0V18a1,1,0,0,0-2,0ZM4.22,6.36l-1.41-1.41L1,6.36,2.41,7.78l1.41-1.41L4.22,6.36ZM7.78,2.41,6.36,1,5.64,2.41l1.41,1.41L7.78,2.41ZM3,11H6a1,1,0,0,0,0,2H3a1,1,0,0,0,0-2ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Z"/>
-      </svg>
-      
-      {/* Moon icon (when "checked" is true) */}
-      <svg className="swap-on fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M21.64,13.14A1,1,0,0,0,21.05,12.56c-.71-.21-1.43-.33-2.16-.33A7,7,0,0,0,12,18.94a6.94,6.94,0,0,0,.34,2.16c.14.71.39,1.43.71,2.16A1,1,0,0,0,14.05,24a1,1,0,0,0,1-1.73c-.09-.15-.18-.3-.27-.45A4.89,4.89,0,0,1,13.1,20.42a5,5,0,0,1,3.29-3.29c.15-.08.3-.17.45-.27A1,1,0,0,0,17.44,16.2a1,1,0,0,0,1.73-1c.21-.71.33-1.43.33-2.16A6.9,6.9,0,0,0,21.64,13.14Z"/>
-      </svg>
-    </label>
-  );
 };
 
 export default ThemeSwitcher;

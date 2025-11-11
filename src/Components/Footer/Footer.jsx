@@ -4,16 +4,17 @@ import { FaFacebook, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { IoLogoGithub } from 'react-icons/io';
 import { MdKeyboardDoubleArrowUp } from "react-icons/md";
 import { Link } from 'react-router';
+import ScrollToTop from '../../Utilities/ScrollToTop';
 
 const Footer = () => {
     return (
         <div className='relative bg-green-950 py-20'>
-            <div className='flex max-w-[1536px] mx-auto px-4 gap-20'>
+            <div className='md:flex max-w-[1536px] mx-auto px-4 gap-20'>
                 {/* left */}
                 <div className='flex-1 '>
                     <div className='flex items-center gap-6 mb-6'>
                         <img className='w-14' src={logo} alt="" />
-                        <p className='text-white font-semibold text-3xl'>Better Tomorrow</p>
+                        <p className='text-white font-semibold text-3xl bg-g fro '>Better Tomorrow</p>
                     </div>
                     <p className=' text-gray-100 mb-4'>"Better Tomorrow" is a community platform dedicated to positive change. Discover, create, and join local social service events like clean-up drives and tree plantations. It's the easiest way to find volunteer opportunities and make a difference in your neighborhood.</p>
 
@@ -56,11 +57,11 @@ const Footer = () => {
                         </a>
                     </div>
                     <div>
-                        <button className='btn bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-content '> <MdKeyboardDoubleArrowUp className='text-xl' />   Back To Top</button>
+                        <button onClick={() => ScrollToTop()} className='btn bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-content active:translate-y-0.5 '> <MdKeyboardDoubleArrowUp className='text-xl' />   Back To Top</button>
                     </div>
                 </div>
                 {/* Right */}
-                <div className='flex-1 flex text-gray-300'>
+                <div className='flex-1 flex mt-5 md:0 text-gray-300'>
                     <div className='flex-1'>
                         <h2 className=' text-2xl font-medium text-gray-200 mb-6'>Site Map</h2>
                         <ul className='*:mb-2 text-gray-400 *:hover:text-gray-300 *:hover:underline'>
@@ -83,7 +84,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className='absolute bottom-0 w-full bg-[#1EB88E] py-1'>
+            <div className='absolute bottom-0 w-full bg-gray-950 py-1'>
                 <p className='text-gray-200 text-center'> &copy; 2025 All rights reserve. Better Tomorrow.</p>
             </div>
         </div>

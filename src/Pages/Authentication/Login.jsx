@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import { handleFirebaseSuccess } from '../../Utilities/handleFirebaseSuccess';
 import { handleFirebaseError } from '../../Utilities/handleFirebaseError';
+import useAxios from '../../Hooks/useAxios';
 
 const Login = () => {
 
@@ -16,8 +17,8 @@ const Login = () => {
     user
   } = useAuth()
 
-  // const [success, setSuccess] = useState(false);
-  // const [error, setError] = useState("")
+    const axiosInstance = useAxios()
+
   const [showPwd, setShowPwd] = useState(false)
   const location = useLocation();
   const navigate = useNavigate()
@@ -49,7 +50,18 @@ const Login = () => {
 
   const handleGoogleSignIn = () => {
     signInWithGoogle()
-      .then(() => {
+      .then((result) => {
+        const user = result.user
+        const newUser = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        }
+        // create user in database
+        axiosInstance.post('/users', newUser)
+          .then(data => {
+            console.log(data.data);
+          })
         setLoading(false)
         handleFirebaseSuccess("google-login")
         const from = location?.state || "/";
@@ -95,7 +107,7 @@ const Login = () => {
                 <input
                   type="email"
                   id="email"
-                  name="email" 
+                  name="email"
                   ref={emailRef}
                   placeholder="mail@mail.com"
                   className="w-full rounded-lg border border-gray-300 p-3 pl-10 focus:border-secondary focus:outline-none focus:ring-1 focus:ring-secondary"

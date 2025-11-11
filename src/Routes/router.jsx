@@ -8,6 +8,10 @@ import ForgotPassword from '../Pages/Authentication/ForgotPassword';
 import Register from '../Pages/Authentication/Register';
 import Login from '../Pages/Authentication/Login';
 import LoginPage from '../Pages/Authentication/Login';
+import Events from '../Pages/Events/Events';
+import CreateEvent from '../Components/CreateEvent/CreateEvent';
+import ManageEvents from '../Components/ManageEvents/ManageEvents';
+import JoinedEvents from '../Components/JoinedEvents/JoinedEvents';
 
 const router = createBrowserRouter([
     {
@@ -18,7 +22,27 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: Home,
-            }
+            },
+            {
+                path: 'events',
+                Component: Events,
+            },
+            {
+                path: 'event/create',
+                Component: CreateEvent,
+            },
+            {
+                path: 'event/manage',
+                Component: ManageEvents,
+            },
+            {
+                path: 'event/joined',
+                Component: JoinedEvents,
+            },
+            {
+                path: 'profile',
+                Component: JoinedEvents,
+            },
         ]
     },
     {

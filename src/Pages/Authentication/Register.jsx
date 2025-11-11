@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 // import logo from '../../assets/toytopia.png'
 import { FaEye, FaEyeSlash, FaFacebook, FaInstagram, FaPhotoVideo, FaTwitter, FaUser } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router";
-import { HiOutlineMail } from 'react-icons/hi';
-import { FcGoogle } from 'react-icons/fc';
 import Swal from 'sweetalert2';
 import registerBg from '../../assets/register.jpg'
-// import registerBg from '../../assets/register-bg.jpg'
 import useAuth from '../../Hooks/useAuth';
 import { handleFirebaseError } from '../../Utilities/handleFirebaseError';
 import { handleFirebaseSuccess } from '../../Utilities/handleFirebaseSuccess';
@@ -15,6 +12,7 @@ import {
   FaGoogle, FaFacebookF, FaApple, FaRegEnvelope,
 } from 'react-icons/fa';
 import { IoMdAttach } from "react-icons/io";
+import useAxios from '../../Hooks/useAxios';
 
 const Register = () => {
 
@@ -26,6 +24,8 @@ const Register = () => {
     signOutUser,
     setLoading
   } = useAuth()
+
+  const axiosInstance = useAxios()
 
   const [error, setError] = useState("")
   const [showPwd, setShowPwd] = useState(false)
@@ -41,8 +41,6 @@ const Register = () => {
     const terms = e.target.terms.checked
     const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z]).+$/;
 
-    console.log(email, password, terms);
-
     if (!passwordPattern.test(password)) return setError("Passowrd must be at least one Uppercase and one Lowercase")
     if (!terms) return toast.error("Please Accept our terms and conditions")
 
@@ -50,15 +48,32 @@ const Register = () => {
     setError("")
 
     createUser(email, password)
-      .then(() => {
+      .then((result) => {
         e.target.reset()
+        const user = result.user
         updateUserProfile(name, photoURL)
           .then(() => {
             console.log("Profile updated!");
+            const newUser = {
+              name: user.displayName,
+              email: user.email,
+              photoURL: user.photoURL,
+            }
+            // create user in database
+            axiosInstance.post('/users', newUser)
+              .then(data => {
+                console.log(data.data);
+              })
           })
           .catch(error => {
             handleFirebaseError(error)
           })
+
+        // const newUser = {
+        //   name: user.displayName,
+        //   email: user.email,
+        //   photoURL: user.photoURL,
+        // }
         signOutUser()
         Swal.fire({
           title: "Account created successfully!",
@@ -72,6 +87,12 @@ const Register = () => {
           }
         })
         setLoading(false)
+
+        // // create user in database
+        // axiosInstance.post('/users', newUser)
+        //   .then(data => {
+        //     console.log(data.data);
+        //   })
       })
       .catch((error) => {
         setLoading(false)
@@ -85,11 +106,26 @@ const Register = () => {
 
   const handleGoogleSignIn = () => {
     signInWithGoogle()
-      .then(() => {
+      .then((result) => {
+        const user = result.user
+        const newUser = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        }
+
+        console.log(result);
         setLoading(false)
         const from = location?.state?.from?.pathname || "/";
         navigate(from, { replace: true })
         handleFirebaseSuccess("google-login")
+
+        // create user in database
+        axiosInstance.post('/users', newUser)
+          .then(data => {
+            console.log(data.data);
+          })
+
       })
       .catch((error) => {
         setLoading(false)
@@ -201,6 +237,10 @@ const Register = () => {
                 Forgot password?
               </Link>
             </div>
+
+            {
+              error && <p className='text-red-500' >{error}</p>
+            }
 
             {/* Sign In Button */}
             <button
