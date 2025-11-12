@@ -13,6 +13,7 @@ import CreateEvent from '../Components/CreateEvent/CreateEvent';
 import ManageEvents from '../Components/ManageEvents/ManageEvents';
 import JoinedEvents from '../Components/JoinedEvents/JoinedEvents';
 import EventDetails from '../Pages/Events/EventDetails';
+import ProgressTracker from './ProgressTracker';
 
 const router = createBrowserRouter([
     {
@@ -65,7 +66,11 @@ const router = createBrowserRouter([
     {
         path: '/*',
         Component: Error404,
-    }
+    },
+    {
+        path: '/progress',
+        Component: ProgressTracker,
+    },
 ])
 
 export default router;
