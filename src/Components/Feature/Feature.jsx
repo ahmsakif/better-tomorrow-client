@@ -8,8 +8,8 @@ import { ChartIcon, PlusIcon, SearchIcon } from './FeatureIconsSVG';
 
 const Feature = () => {
   return (
-    <section className="py-20 bg-base-100 ">
-      <div className="container mx-auto px-4">
+    <section className="my-20 bg-base-100 ">
+      <div className="container max-w-[1536px] mx-auto px-4">
         
         {/* Section Header */}
         <div className="text-center mb-12">
