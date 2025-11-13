@@ -50,6 +50,9 @@ const GallerySlider = () => {
     return (
         <section className="my-16 bg-base-100 flex justify-center">
             <div className="w-full max-w-[1536px] px-4">
+                
+                <h1 className="text-center mb-10 text-3xl font-semibold md:text-5xl">Gallery</h1>
+
                 <Swiper
                     modules={[EffectCoverflow, Pagination]}
                     effect="coverflow"
