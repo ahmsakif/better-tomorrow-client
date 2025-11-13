@@ -1,5 +1,6 @@
 import React from 'react';
 import bannerImg from '../../assets/banner.jpg'
+import { Link } from 'react-router';
 
 const Banner = () => {
     return (
@@ -13,8 +14,8 @@ const Banner = () => {
                 </div>
 
                 <div className=' mx-auto max-w-[1536px] text-center mt-6 space-x-8 '>
-                    <button className=' btn btn-primary btn-lg hover:bg-linear-to-r from-primary to-secondary border-0 shadow-none ease-linear transform duration-300 transition-all ' >Explore Events</button>
-                    <button className=' btn btn-outline btn-primary text-primary-content btn-lg  border-4 shadow-none ease-linear transform duration-200 transition-all ' >Donate Now</button>
+                    <Link to="/events" className=' btn bg-primary/60 btn-lg hover:bg-primary from-primary to-secondary border-0 shadow-none ease-linear transform duration-300 transition-all ' >Explore Events</Link>
+                    <button className=' btn btn-outline hover:bg-primary/80 text-primary-content btn-lg  border-4 border-primary-content shadow-none ease-linear transform duration-200 transition-all ' >Donate Now</button>
                 </div>
             </div>
         </div>
