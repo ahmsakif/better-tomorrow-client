@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hooks/useAuth';
 import useAxios from '../../Hooks/useAxios';
 import JoinedCard from '../JoinedCard/JoinedCard';
+import Loader from '../Loader/Loader';
 
 const JoinedEvents = () => {
 
@@ -32,7 +33,7 @@ console.log(events);
     }, [user, axiosInstance]);
 
     if (loading) {
-        return <div className="text-center my-20"><span className="loading loading-lg"></span></div>
+        return <Loader></Loader>
       }
     
       // Show error message
@@ -54,7 +55,7 @@ console.log(events);
 
     return (
         <div className=' my-20 '>
-
+<h1 className=' text-3xl md:text-5xl text-center font-semibold mb-10'>Joined Events</h1>
             <div className=' max-w-[1536px] mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6 '>
                 {
                     events.map(event=><JoinedCard key={event._id} event={event}></JoinedCard>)

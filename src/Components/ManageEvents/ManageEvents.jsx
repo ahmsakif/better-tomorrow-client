@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hooks/useAuth';
 import useAxios from '../../Hooks/useAxios';
 import ManageEventCard from '../ManageEventCard/ManageEventCard';
+import Loader from '../Loader/Loader';
 
 const ManageEvents = () => {
 
@@ -55,7 +56,7 @@ const ManageEvents = () => {
     };
 
     if (loading) {
-        return <div className="text-center my-20"><span className="loading loading-lg"></span></div>
+        return <Loader></Loader>
     }
 
     // Show error message

@@ -145,7 +145,7 @@ const Register = () => {
       </div>
 
       {/* Right Side: Login Form */}
-      <div className="flex w-full h-screen items-center justify-center lg:w-1/2 bg-base-100">
+      <div className="flex w-full h-screen items-center justify-center lg:w-1/2 bg-base-100 px-4 lg:px-0">
         <div className="w-full max-w-md">
           <h2 className="mb-4 text-4xl font-semibold text-base-content">
             Join the Community

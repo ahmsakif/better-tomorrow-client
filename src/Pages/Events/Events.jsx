@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useAxios from '../../Hooks/useAxios';
 import EventCard from '../../Components/EventCard/EventCard';
 import { CiSearch } from "react-icons/ci";
+import EventCardSkeleton from '../../Components/Loader/EventCardSkeleton';
 
 const Events = () => {
 
@@ -32,7 +33,7 @@ const Events = () => {
 
     return (
         <div className=' max-w-[1536px] mx-auto mt-20 px-4'>
-
+            <h1 className=' text-3xl md:text-5xl text-center font-semibold mb-10'>Upcoming Events</h1>
             <div className="md:flex justify-between mx-auto">
                 <div>
                     <select
@@ -76,9 +77,19 @@ const Events = () => {
 
             <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 my-20'>
                 {
-                    !events
-                        ? <p>No Events Available</p>
-                        : events.map((event) => <EventCard key={event._id} event={event} ></EventCard>)
+                    loading? (
+                                <>
+                                <EventCardSkeleton key={1} />
+                                <EventCardSkeleton key={2} />
+                                <EventCardSkeleton key={3} />
+                                <EventCardSkeleton key={4} />
+                                <EventCardSkeleton key={5} />
+                                <EventCardSkeleton key={6} />
+                                </>
+                            )
+                        :!events
+                            ? <p>No Events Available</p>
+                            : events.map((event) => <EventCard key={event._id} event={event} ></EventCard>)
                 }
             </div>
         </div>

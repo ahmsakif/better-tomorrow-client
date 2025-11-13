@@ -5,6 +5,7 @@ import { FaEdit } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import ShortcutCards from '../ShortcutCards/ShortcutCads';
+import Loader from '../Loader/Loader';
 
 const Profile = () => {
   const { user, loading, signOutUser, updateUserProfile, setLoading } = useAuth()
