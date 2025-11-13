@@ -1,13 +1,14 @@
 import axios from "axios";
-import { getAuth } from "firebase/auth";
+import useAuth from "./useAuth";
+
 
 const axiosSecure = axios.create({
     baseURL: "http://localhost:3000"
 });
 
 axiosSecure.interceptors.request.use(async (config) => {
-    const { user } = getAuth();
-
+    const { user } = useAuth();
+console.log(user);
     if (user) {
         const token = await user.accessToken();
         console.log(token);

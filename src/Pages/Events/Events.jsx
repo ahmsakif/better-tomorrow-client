@@ -33,6 +33,7 @@ const Events = () => {
 
     return (
         <div className=' max-w-[1536px] mx-auto mt-20 px-4'>
+            <title>Upcoming Events</title>
             <h1 className=' text-3xl md:text-5xl text-center font-semibold mb-10'>Upcoming Events</h1>
             <div className="md:flex justify-between mx-auto">
                 <div>

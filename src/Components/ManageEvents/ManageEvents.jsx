@@ -32,7 +32,7 @@ const ManageEvents = () => {
         };
 
         fetchEvent();
-    }, [user, axiosInstance]);
+    }, [user, axiosSecure]);
 
     // Update handler
     const handleUpdate = async (id, updatedData) => {
@@ -65,6 +65,7 @@ const ManageEvents = () => {
     if (error) {
         return (
             <div className="flex justify-center items-center min-h-[60vh]">
+                <title>Manage Events</title>
                 <div className="text-center text-red-500">
                     <h2 className="text-2xl font-bold">Oops!</h2>
                     <p>{error}</p>

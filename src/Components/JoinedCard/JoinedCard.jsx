@@ -4,7 +4,7 @@ import { FaMapMarkerAlt, FaCalendarAlt, FaUserTie, FaTag } from "react-icons/fa"
 
 const JoinedCard = ({ event }) => {
   const { title, eventType, location, eventDate, creatorName } = event;
-console.log(event);
+console.log(event); 
   return (
     <motion.div
       whileHover={{ scale: 1.03 }}

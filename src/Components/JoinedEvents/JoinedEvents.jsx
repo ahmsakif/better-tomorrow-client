@@ -11,6 +11,7 @@ const JoinedEvents = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const axiosInstance = useAxios()
+    
 console.log(events);
     useEffect(() => {
         const fetchEvent = async () => {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import avatar from "../../assets/user.png";
 import Swal from 'sweetalert2';
 import { FaEdit } from 'react-icons/fa';
@@ -66,6 +66,7 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col items-center justify-center my-16 px-4">
+      <title>Profile</title>
       <div className="bg-white shadow-2xl rounded-3xl max-w-5xl w-full flex flex-col md:flex-row overflow-hidden">
         {/* Left Section */}
         <div className="w-full md:w-1/2 bg-gradient-to-br from-secondary to-blue-800 text-white flex flex-col justify-center items-center p-10">
