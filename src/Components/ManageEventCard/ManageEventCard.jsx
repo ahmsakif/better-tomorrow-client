@@ -9,10 +9,10 @@ import useAxios from "../../Hooks/useAxios";
 const ManageEventCard = ({ event, onUpdate, onDelete }) => {
   const axiosInstance = useAxios();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [localEvent, setLocalEvent] = useState(event); // ⬅️ local copy of event
+  const [localEvent, setLocalEvent] = useState(event);
   const [isLoading, setIsLoading] = useState(!event);
 
-  // ✅ when parent event changes, update local state
+
   useEffect(() => {
     if (event) {
       setLocalEvent(event);
@@ -32,7 +32,7 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
     creatorPhotoURL,
   } = localEvent || {};
 
-  // ✅ show skeleton during initial load only
+
   if (isLoading) {
     return (
       <div className="card max-w-lg bg-base-100 shadow-xl p-4 flex flex-col gap-3 animate-pulse">
@@ -60,7 +60,6 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
     );
   }
 
-  // ✅ handle invalid or missing date safely
   let formattedDate = "TBA";
   let formattedTime = "";
   if (eventDate) {
@@ -75,7 +74,6 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
     }
   }
 
-  // ✅ handle update and immediately refresh local event
   const handleUpdate = async (formData) => {
     setIsLoading(!event)
     try {
