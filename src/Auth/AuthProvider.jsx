@@ -15,6 +15,7 @@ import { AuthContext } from './AuthContext';
 import { auth } from '../Firebase/firebase.config';
 
 const googleProvider = new GoogleAuthProvider()
+googleProvider.addScope('email')
 const facebookProvider = new FacebookAuthProvider()
 const appleProvider = new OAuthProvider()
 

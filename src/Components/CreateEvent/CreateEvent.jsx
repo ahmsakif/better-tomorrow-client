@@ -6,11 +6,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import useAuth from '../../Hooks/useAuth';
 import useAxios from '../../Hooks/useAxios';
 import { FaMapMarkerAlt, FaCalendarAlt, FaImage, FaTag } from 'react-icons/fa';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const CreateEvent = () => {
   const { user } = useAuth();
   const axiosInstance = useAxios();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure()
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -46,7 +48,7 @@ const CreateEvent = () => {
 
     const toastId = toast.loading("Creating your event...");
     try {
-      const response = await axiosInstance.post('/events', eventData);
+      const response = await axiosSecure.post('/events', eventData);
       if (response.data.insertedId) {
         toast.success("Event created successfully!", { id: toastId });
         navigate('/events'); 

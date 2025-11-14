@@ -1,78 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hooks/useAuth';
 import useAxios from '../../Hooks/useAxios';
-import ManageEventCard from '../ManageEventCard/ManageEventCard';
-import Loader from '../Loader/Loader';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import Loader from '../Loader/Loader';
+import ManageEventCard from '../ManageEventCard/ManageEventCard';
+import toast from 'react-hot-toast';
 
 const ManageEvents = () => {
 
     const { user } = useAuth()
     const [events, setEvents] = useState([])
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const axiosInstance = useAxios()
     const axiosSecure = useAxiosSecure()
-    console.log(events);
+    const [dataLoading, setDataLoading] = useState(true)
+
     useEffect(() => {
-        const fetchEvent = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const response = await axiosSecure.get(`/myevents?email=${user.email}`);
-                setEvents(response.data);
-
-            } catch (error) {
-                console.error("Failed to fetch event:", error);
-                setError("Event not found or an error occurred.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchEvent();
-    }, [user, axiosSecure]);
+        setDataLoading(true)
+        if (user) {
+            axiosSecure.get(`/myevents?email=${user.email}`)
+                .then((data) => {
+                    setEvents(data.data)
+                    setDataLoading(false)
+                })
+        }
+        else ({ message: "No Events Found for this user" })
+    }, [axiosSecure, user])
 
     // Update handler
-    const handleUpdate = async (id, updatedData) => {
-        try {
-            const response = await axiosInstance.patch(`/events/${id}`, updatedData);
-            const updatedEvent = response.data;
+    // const handleUpdate = async (id, updatedData) => {
+    //     try {
+    //         const response = await axiosInstance.patch(`/events/${id}`, updatedData);
+    //         const updatedEvent = response.data;
+    //         // Update state
+    //         setEvents(prev => prev.map(e => e._id === id ? updatedEvent : e));
+    //     } catch (error) {
+    //         console.error("Failed to update event:", error);
+    //     }
+    // };
 
-            // Update state
-            setEvents(prev => prev.map(e => e._id === id ? updatedEvent : e));
+    const handleUpdate2 = async ( _id, updatedData) => {
+        // e.preventDefault()
+
+        const toastId = toast.loading("Updating your event...")
+        try {
+            const response = await axiosInstance.patch(`/events/${_id}`, updatedData)
+            if (response.data.modifiedCount) {
+                toast.success("Event updated succesfully!", { id: toastId })
+                // navigate('/events/manage')
+                setEvents(prev=>prev.map(ev=>ev._id ===_id? {...ev, ...updatedData} : ev))
+            } else {
+                toast.error("An unknown error occurred", { id: toastId })
+            }
         } catch (error) {
-            console.error("Failed to update event:", error);
+            console.log("Failed to update event",error);
+            toast.error("Failed to update event. Please try again", {id: toastId})
         }
-    };
+    }
 
     // Delete handler
     const handleDelete = async (id) => {
         try {
-            await axiosSecure.delete(`/events/${id}`);
-            setEvents(prev => prev.filter(e => e._id !== id));
+            const response = await axiosInstance.delete(`/events/${id}`);
+            if (response.data.deletedCount === 1) {
+                setEvents(prev => prev.filter(e => e._id !== id));
+            }
+            return response.data
         } catch (error) {
             console.error("Failed to delete event:", error);
+            throw error;
         }
     };
 
-    if (loading) {
-        return <Loader></Loader>
-    }
 
-    // Show error message
-    if (error) {
-        return (
-            <div className="flex justify-center items-center min-h-[60vh]">
-                <title>Manage Events</title>
-                <div className="text-center text-red-500">
-                    <h2 className="text-2xl font-bold">Oops!</h2>
-                    <p>{error}</p>
-                </div>
-            </div>
-        );
-    }
+    if (dataLoading) return <Loader></Loader>
 
     if (!events) {
         return <div className="text-center my-20"><h2>Event not found.</h2></div>;
@@ -86,7 +86,7 @@ const ManageEvents = () => {
                     <ManageEventCard
                         key={event._id}
                         event={event}
-                        onUpdate={handleUpdate}
+                        onUpdate={handleUpdate2}
                         onDelete={handleDelete}
                     />
                 ))}

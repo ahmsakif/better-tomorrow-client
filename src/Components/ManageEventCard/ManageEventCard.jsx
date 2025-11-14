@@ -4,14 +4,13 @@ import { format } from "date-fns";
 import { IoLocationOutline, IoCalendarOutline, IoTimeOutline } from "react-icons/io5";
 import userAvatar from "../../assets/user.png";
 import EditEventModal from "../EditEventModal/EditEventModal";
-import useAxios from "../../Hooks/useAxios";
+// import useAxios from "../../Hooks/useAxios";
 
 const ManageEventCard = ({ event, onUpdate, onDelete }) => {
-  const axiosInstance = useAxios();
+  // const axiosInstance = useAxios();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localEvent, setLocalEvent] = useState(event);
   const [isLoading, setIsLoading] = useState(!event);
-
 
   useEffect(() => {
     if (event) {
@@ -30,78 +29,16 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
     eventDate,
     creatorName,
     creatorPhotoURL,
-  } = localEvent || {};
+  } = localEvent;
 
-
-  if (isLoading) {
-    return (
-      <div className="card max-w-lg bg-base-100 shadow-xl p-4 flex flex-col gap-3 animate-pulse">
-        <div className="h-64 bg-base-200 rounded-xl"></div>
-
-        <div className="flex items-center gap-3 mt-3">
-          <div className="w-10 h-10 rounded-full bg-base-200"></div>
-          <div className="flex flex-col gap-2">
-            <div className="h-3 w-24 bg-base-200 rounded"></div>
-            <div className="h-3 w-32 bg-base-200 rounded"></div>
-          </div>
-        </div>
-
-        <div className="h-4 bg-base-200 rounded w-3/4 mt-3"></div>
-        <div className="flex flex-col gap-2 mt-2">
-          <div className="h-3 bg-base-200 rounded w-full"></div>
-          <div className="h-3 bg-base-200 rounded w-5/6"></div>
-        </div>
-
-        <div className="flex gap-2 mt-4">
-          <div className="btn btn-disabled flex-1 bg-base-200 border-none"></div>
-          <div className="btn btn-disabled flex-1 bg-base-200 border-none"></div>
-        </div>
-      </div>
-    );
-  }
-
-  let formattedDate = "TBA";
-  let formattedTime = "";
-  if (eventDate) {
-    const validDate =
-      typeof eventDate === "string" && eventDate.length === 16
-        ? new Date(eventDate + ":00")
-        : new Date(eventDate);
-
-    if (!isNaN(validDate)) {
-      formattedDate = format(validDate, "EEEE, dd MMMM, yyyy");
-      formattedTime = format(validDate, "hh:mm a");
-    }
-  }
+  const formattedDate = format(new Date(eventDate), "EEEE, dd MMMM, yyyy");
+  const formattedTime = format(new Date(eventDate), "hh:mm a");
 
   const handleUpdate = async (formData) => {
-    setIsLoading(!event)
-    try {
-      const updatedData = {
-        ...formData,
-        eventDate: new Date(formData.eventDate).toISOString(),
-      };
 
-      // Send update to server
-      await axiosInstance.patch(`/events/${_id}`, updatedData);
+    onUpdate(_id, formData)
 
-      // Update locally without refresh
-      const newEvent = { ...localEvent, ...updatedData };
-      setLocalEvent(newEvent);
-      onUpdate(_id, newEvent);
-
-      Swal.fire({
-        icon: "success",
-        title: "Event updated successfully!",
-        showConfirmButton: false,
-        timer: 1200,
-      });
-      setIsModalOpen(false);
-      setIsLoading(event)
-    } catch (error) {
-      console.error(error);
-      setIsModalOpen(false);
-    }
+    setIsModalOpen(false);
   };
 
   const handleDelete = () => {
@@ -113,10 +50,19 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
       confirmButtonColor: "#3b82f6",
       cancelButtonColor: "#ef4444",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        onDelete(_id);
-        Swal.fire("Deleted!", "Your event has been deleted.", "success");
+        try {
+          const response = await onDelete(_id)
+          if (response.deletedCount === 1) {
+            Swal.fire("Deleted!", "Your event has been deleted", "success")
+          } else {
+            Swal.fire("Failed!", "Event not found or already deleted.", "error");
+          }
+        } catch (error) {
+          console.error("Deleted Failed:", error);
+          Swal.fire("Failed!", "Could not delete the event. Try again", "error")
+        }
       }
     });
   };
@@ -207,5 +153,4 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
     </div>
   );
 };
-
 export default ManageEventCard;

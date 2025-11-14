@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import logo from '../../assets/better-tomorrow-logo.png'
 import ScrollToTop from '../../Utilities/ScrollToTop';
 import useAuth from '../../Hooks/useAuth';
@@ -14,10 +14,12 @@ const Navbar = () => {
     const {
         user, loading, signOutUser
     } = useAuth()
+    const navigate = useNavigate()
 
     const handleLogOut = () => {
         signOutUser()
         handleFirebaseSuccess("logout")
+        navigate('/')
     }
 
     const getActiveClass = ({ isActive }) => {

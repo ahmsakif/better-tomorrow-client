@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useAxios from '../../Hooks/useAxios';
 import EventCard from '../../Components/EventCard/EventCard';
-import { CiSearch } from "react-icons/ci";
 import EventCardSkeleton from '../../Components/Loader/EventCardSkeleton';
 
 const Events = () => {

@@ -1,20 +1,49 @@
 import axios from "axios";
 import useAuth from "./useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 
-const axiosSecure = axios.create({
+const instance = axios.create({
     baseURL: "http://localhost:3000"
 });
 
-axiosSecure.interceptors.request.use(async (config) => {
-    const { user } = useAuth();
-console.log(user);
-    if (user) {
-        const token = await user.accessToken();
-        console.log(token);
-        config.headers.authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+const useAxiosSecure = () => {
 
-export default axiosSecure;
+    const { user, signOutUser } = useAuth()
+    const navigate = useNavigate()
+    //   set token in the header for all the api call using axiosSecure
+
+
+    useEffect(() => {
+
+        // request interceptor
+        const requestInterceptor = instance.interceptors.request.use((config) => {
+            // console.log(config);
+            config.headers.authorization = `Bearer ${user.accessToken}`
+            return config
+        })
+
+        // response interceptor
+        const responseInterceptor = instance.interceptors.response.use(res => { 
+            return res;
+        }, err => { 
+            const status = err.status
+            if(status === 401 || status === 403) {
+                signOutUser()
+                .then(()=>{
+                    navigate('/login')
+                })
+            }
+        })
+
+        return () => {
+            instance.interceptors.request.eject(requestInterceptor)
+            instance.interceptors.response.eject(responseInterceptor)
+        }
+    }, [user, signOutUser, navigate])
+
+    return instance
+};
+
+export default useAxiosSecure;

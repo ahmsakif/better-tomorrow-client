@@ -2,7 +2,6 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router';
 import HomeLayout from '../Layout/HomeLayout';
 import Home from '../Pages/Home/Home';
-import AuthLayout from '../Layout/AuthLayout';
 
 import ForgotPassword from '../Pages/Authentication/ForgotPassword';
 import Register from '../Pages/Authentication/Register';
@@ -16,7 +15,6 @@ import EventDetails from '../Pages/Events/EventDetails';
 import ProgressTracker from './ProgressTracker';
 import Profile from '../Components/Profile/Profile';
 import PrivateRoute from './PrivateRoute';
-import JoinedCard from '../Components/JoinedCard/JoinedCard';
 import Error404 from '../Pages/ErrorPages/Error404';
 import NotFound from '../Pages/ErrorPages/NotFound';
 
@@ -44,7 +42,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'event/joined',
-                element: <PrivateRoute><JoinedCard></JoinedCard></PrivateRoute>
+                element: <PrivateRoute><JoinedEvents></JoinedEvents></PrivateRoute>
             },
             {
                 path: 'profile',

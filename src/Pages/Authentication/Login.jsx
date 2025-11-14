@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaGoogle, FaFacebookF, FaApple, FaRegEnvelope, FaEyeSlash, FaEye, FaLock } from 'react-icons/fa';
 import loginBg from '../../assets/register-bg.jpg'
 import { Link, useLocation, useNavigate } from 'react-router';
@@ -6,6 +6,7 @@ import useAuth from '../../Hooks/useAuth';
 import { handleFirebaseSuccess } from '../../Utilities/handleFirebaseSuccess';
 import { handleFirebaseError } from '../../Utilities/handleFirebaseError';
 import useAxios from '../../Hooks/useAxios';
+import Loader from '../../Components/Loader/Loader';
 
 const Login = () => {
 
@@ -14,7 +15,8 @@ const Login = () => {
     signInUser,
     signInWithGoogle,
     setLoading,
-    user
+    user,
+    loading,
   } = useAuth()
 
   const axiosInstance = useAxios()
@@ -24,11 +26,12 @@ const Login = () => {
   const navigate = useNavigate()
   const emailRef = useRef()
 
-  if (user) {
-    navigate("/");
-    return;
-  }
-
+  useEffect(() => {
+    if(user){
+      navigate('/', {replace: true})
+    }
+  })
+  
   const handleSignIn = (e) => {
     e.preventDefault()
     const email = e.target.email.value
@@ -70,7 +73,7 @@ const Login = () => {
           })
         setLoading(false)
         handleFirebaseSuccess("google-login")
-        const from = location?.state || "/";
+        const from = location?.state?.from?.pathname || "/";
         navigate(from, { replace: true })
       })
       .catch(error => {
@@ -86,6 +89,7 @@ const Login = () => {
     setShowPwd(!showPwd)
   }
 
+  if(loading) return <Loader></Loader>
 
   return (
     <div className="flex min-h-screen bg-white">

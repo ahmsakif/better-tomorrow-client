@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 import { format } from "date-fns";
 import useAxios from '../../Hooks/useAxios';
 import Swal from 'sweetalert2';
@@ -12,8 +12,10 @@ const EventDetails = () => {
   const { user } = useAuth()
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-const navigate = useNavigate()
+  const navigate = useNavigate()
+  const location = useLocation()
   const axiosInstance = useAxios();
+  const [joining, setJoining] = useState(false)
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -38,23 +40,21 @@ const navigate = useNavigate()
   const handleJoinEvent = async () => {
 
     if (!user) {
-      // ene kichu korte hobe
-      
-        Swal.fire({
-          title: "Oops You haven't logged in",
-          text: "You need to log in your account to join this event",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Login"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/login')
-          }
-        });
-      
-      return 
+      Swal.fire({
+        title: "Oops You haven't logged in",
+        text: "You need to log in your account to join this event",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Login"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login', { state: { from: location } })
+        }
+      });
+
+      return
     }
 
     const joinEventData = {
@@ -63,6 +63,7 @@ const navigate = useNavigate()
     }
 
     try {
+      setJoining(true)
       const response = await axiosInstance.post('/joined', joinEventData);
       if (response.data.insertedId) {
         Swal.fire({
@@ -87,6 +88,8 @@ const navigate = useNavigate()
         showConfirmButton: false,
         timer: 1500,
       })
+    } finally {
+      setJoining(false)
     }
   }
 
@@ -154,7 +157,7 @@ const navigate = useNavigate()
             </div>
           </div>
 
-          <button onClick={handleJoinEvent} className="btn btn-primary btn-lg btn-block rounded-none">
+          <button disabled={joining} onClick={handleJoinEvent} className="btn btn-primary btn-lg btn-block rounded-none">
             Join This Event
           </button>
         </div>

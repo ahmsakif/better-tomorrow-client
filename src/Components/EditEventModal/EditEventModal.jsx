@@ -65,7 +65,7 @@ const EditEventModal = ({ isOpen, onClose, formData, setFormData, onUpdate, minD
           />
         </div>
         <div className="modal-action flex justify-end gap-2 mt-2">
-          <button className="btn btn-primary" onClick={onUpdate}>Update</button>
+          <button className="btn btn-primary" onClick={()=> onUpdate(formData)}>Update</button>
           <button className="btn btn-outline" onClick={onClose}>Cancel</button>
         </div>
       </div>
