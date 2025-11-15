@@ -16,7 +16,7 @@ const HomeLayout = () => {
     },[])
 
     return (
-        <div>
+        <div className='min-h-screen'>
             <Navbar></Navbar>
             <div className='overflow-hidden'>
                 <Outlet></Outlet>
