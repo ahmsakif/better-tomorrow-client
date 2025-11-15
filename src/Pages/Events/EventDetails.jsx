@@ -7,6 +7,7 @@ import useAuth from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 
+
 const EventDetails = () => {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
@@ -70,7 +71,7 @@ const EventDetails = () => {
       if (response.data.insertedId) {
         Swal.fire({
           icon: "success",
-          title: "Wish you best of luck",
+          title: "Thanks for joining! We're excited to have you in the event. 🎉",
           showConfirmButton: false,
           timer: 1500,
         })
@@ -83,10 +84,11 @@ const EventDetails = () => {
         })
       }
     } catch (error) {
-      console.error("Failed to create event:", error.response.data.message);
+      console.error("Failed to Join event:", error);
+      console.log(error);
       Swal.fire({
         icon: "error",
-        title: error.response.data.message,
+        title: error.response?.data?.message,
         showConfirmButton: false,
         timer: 1500,
       })
