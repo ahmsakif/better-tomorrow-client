@@ -75,3 +75,18 @@ Follow these steps to set up the project on your machine.
 **1. Clone the repository**
 ```bash
 git clone [https://github.com/ahmsakif/better-tomorrow.git](https://github.com/ahmsakif/better-tomorrow.git)
+```
+**2. Navigate to the project directory**
+```bash
+cd better-tomorrow-client
+```
+**3. Install dependencies**
+```bash
+npm install
+```
+**4. Start the development server**
+```bash
+npm run dev
+```
+---
+Developed by Sakif Ahmed
