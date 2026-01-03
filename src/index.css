@@ -1,8 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap'); */
+/* New FOnt */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
 @import "tailwindcss";
 @plugin "daisyui";
 
-@plugin "daisyui/theme" {
+/* @plugin "daisyui/theme" {
   name: "bt-light";
   default: true;
   prefersdark: false;
@@ -71,14 +74,84 @@
   --border: 1px;
   --depth: 0;
   --noise: 0;
-}
+} */
 
 /* .navbar-center .active {
   border-bottom: 4px solid green;
   border-radius: 3px;
 } */
 
-body {
+@plugin "daisyui/theme" {
+  name: "bt-light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98.5% 0.002 247.8);
+  --color-base-200: oklch(96.5% 0.005 247.8);
+  --color-base-300: oklch(92.5% 0.01 247.8);
+  --color-base-content: oklch(25% 0.02 260);
+  --color-primary: oklch(65% 0.18 160);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(35% 0.08 160);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(75% 0.15 85);
+  --color-accent-content: oklch(20% 0.05 85);
+  --color-neutral: oklch(35% 0.02 260);
+  --color-neutral-content: oklch(98% 0 0);
+  --color-info: oklch(70% 0.12 230);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(70% 0.15 150);
+  --color-success-content: oklch(20% 0.04 150);
+  --color-warning: oklch(85% 0.18 90);
+  --color-warning-content: oklch(25% 0.05 90);
+  --color-error: oklch(65% 0.2 30);
+  --color-error-content: oklch(100% 0 0);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "bt-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(18% 0.015 260);
+  --color-base-200: oklch(15% 0.015 260);
+  --color-base-300: oklch(12% 0.015 260);
+  --color-base-content: oklch(92% 0.01 260);
+  --color-primary: oklch(75% 0.15 160);
+  --color-primary-content: oklch(15% 0.04 160);
+  --color-secondary: oklch(85% 0.05 160);
+  --color-secondary-content: oklch(20% 0.02 160);
+  --color-accent: oklch(80% 0.12 85);
+  --color-accent-content: oklch(25% 0.05 85);
+  --color-neutral: oklch(28% 0.02 260);
+  --color-neutral-content: oklch(92% 0.01 260);
+  --color-info: oklch(75% 0.1 230);
+  --color-info-content: oklch(15% 0.02 230);
+  --color-success: oklch(75% 0.15 150);
+  --color-success-content: oklch(15% 0.04 150);
+  --color-warning: oklch(88% 0.15 90);
+  --color-warning-content: oklch(20% 0.05 90);
+  --color-error: oklch(70% 0.18 30);
+  --color-error-content: oklch(15% 0.04 30);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* body {
   font-family: "Lato", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -86,4 +159,17 @@ body {
 
 h1, h2{
   font-family: "Nunito", sans-serif;
+} */
+
+/* New font */
+body {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
 }
+
+h1, h2{
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+
