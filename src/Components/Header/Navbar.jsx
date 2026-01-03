@@ -1,197 +1,143 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
+import { PuffLoader } from 'react-spinners'; // Assuming you use react-spinners
 import logo from '../../assets/better-tomorrow-logo.png'
-import ScrollToTop from '../../Utilities/ScrollToTop';
+import avatar from '../../assets/user.png'
 import useAuth from '../../Hooks/useAuth';
+import ScrollToTop from '../../Utilities/ScrollToTop';
 import { handleFirebaseSuccess } from '../../Utilities/handleFirebaseSuccess';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
-import avatar from '../../assets/user.png'
 import ThemeSelector from '../ThemeSwitcher/ThemeSelector';
 
-
 const Navbar = () => {
-
-    const {
-        user, loading, signOutUser
-    } = useAuth()
-    const navigate = useNavigate()
+    const { user, loading, signOutUser } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogOut = () => {
-        signOutUser()
-        handleFirebaseSuccess("logout")
-        navigate('/')
-    }
+        signOutUser();
+        handleFirebaseSuccess("logout");
+        navigate('/');
+    };
 
-    const getActiveClass = ({ isActive }) => {
-        return (
-            isActive
-                ? 'border-b-4 border-primary py-0.5'
-                : 'border-b-4 border-transparent py-0.5'
-        )
-    }
-    const getSidebarActiveClass = ({ isActive }) => {
-        return (
-            isActive
-                ? 'bg-base-300 py-1'
-                : ' py-1 space-y-1'
-        )
-    }
+    // Refined Active Class for a "Pill" effect
+    const getActiveClass = ({ isActive }) => 
+        `relative px-4 py-2 transition-all duration-300 font-medium font-body rounded-full 
+        ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-base-200 text-base-content/80 hover:text-primary'}`;
 
-    const navLinks = <>
-        <li><NavLink to="/" className={getActiveClass}>Home</NavLink></li>
-        <li><NavLink to="/events" className={getActiveClass}>Upcoming Events</NavLink></li>
-        <li><NavLink to="/about" className={getActiveClass}>About Us</NavLink></li>
-    </>
+    const navLinks = (
+        <>
+            <li><NavLink to="/" className={getActiveClass}>Home</NavLink></li>
+            <li><NavLink to="/events" className={getActiveClass}>Upcoming Events</NavLink></li>
+            <li><NavLink to="/about" className={getActiveClass}>About Us</NavLink></li>
+        </>
+    );
 
-    const eventLinks = <>
-        {
-            user
-                ? (
-                    <>
-                        <li><NavLink to="/profile">My Profile</NavLink></li>
-                        <li><NavLink to="/event/create">Create Event</NavLink></li>
-                        <li><NavLink to="/event/manage">Manage Events</NavLink></li>
-                        <li><NavLink to="/event/joined">Joined Events</NavLink></li>
-                    </>
-                )
-                : ""
-        }
-    </>
-
-    const sidebarLinks = <>
-        {
-            user
-                ? (
-                    <>
-                        <li><NavLink className={getSidebarActiveClass} to="/profile">My Profile</NavLink></li>
-                    </>
-                )
-                : ""
-        }
-        <li><NavLink to="/" className={getSidebarActiveClass}>Home</NavLink></li>
-        <li><NavLink to="/events" className={getSidebarActiveClass}>Upcoming Events</NavLink></li>
-        <li><NavLink to="/about" className={getSidebarActiveClass}>About Us</NavLink></li>
-        {
-            user
-                ? (
-                    <>
-                        <li><NavLink className={getSidebarActiveClass} to="/event/create">Create Event</NavLink></li>
-                        <li><NavLink className={getSidebarActiveClass} to="/event/manage">Manage Events</NavLink></li>
-                        <li><NavLink className={getSidebarActiveClass} to="/event/joined">Joined Events</NavLink></li>
-                    </>
-                )
-                : ""
-        }
-    </>
+    const eventLinks = (
+        <>
+            <div className="px-4 py-2 text-xs font-bold text-base-content/40 uppercase tracking-widest">Management</div>
+            <li><NavLink to="/profile" className="hover:bg-primary/10 rounded-lg">My Profile</NavLink></li>
+            <li><NavLink to="/event/create" className="hover:bg-primary/10 rounded-lg">Create Event</NavLink></li>
+            <li><NavLink to="/event/manage" className="hover:bg-primary/10 rounded-lg">Manage Events</NavLink></li>
+            <li><NavLink to="/event/joined" className="hover:bg-primary/10 rounded-lg">Joined Events</NavLink></li>
+            <div className="divider my-1"></div>
+            <li><button onClick={handleLogOut} className="text-error hover:bg-error/10 rounded-lg font-semibold">Logout</button></li>
+        </>
+    );
 
     return (
-        <div className=' bg-base-100 h-20 flex justify-center items-center shadow-sm sticky top-0 z-[999]'>
-            <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-            <nav className="navbar max-w-[1536px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 ">
+        <header className="sticky top-0 z-[999] w-full border-b border-base-200 bg-base-100/80 backdrop-blur-md">
+            <div className="max-w-[1536px] mx-auto navbar px-4 lg:px-8 h-20">
+                
+                {/* Navbar Start: Logo & Mobile Toggle */}
                 <div className="navbar-start">
-
-                    <div className="flex-none lg:hidden">
-                        <label htmlFor="my-drawer-2" aria-label="open sidebar" className="btn btn-square btn-ghost">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                className="inline-block h-6 w-6 stroke-current"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                ></path>
+                    <div className="lg:hidden">
+                        <label htmlFor="my-drawer-2" className="btn btn-ghost btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
                             </svg>
                         </label>
                     </div>
-
-                    <Link to="/" onClick={() => ScrollToTop()}  >
-                        <div className='flex items-center gap-2 '>
-                            <img
-                                src={logo}
-                                alt="Logo"
-                                className='h-10'
-                            />
-                            <h2 className=' font-bold text-xl bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent ' >Better Tomorrow</h2>
-                        </div>
+                    
+                    <Link to="/" onClick={() => ScrollToTop()} className="flex items-center gap-3 group transition-transform hover:scale-105">
+                        <img src={logo} alt="Logo" className="h-10 w-auto" />
+                        <h2 className="hidden sm:block font-heading font-bold text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                            Better Tomorrow
+                        </h2>
                     </Link>
                 </div>
+
+                {/* Navbar Center: Desktop Links */}
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="flex items-center gap-8 font-medium *:hover:border-b-4 *:hover:border-primary *:border-transparent transition-all duration-200 ease-in-out ">
+                    <ul className="flex items-center gap-2">
                         {navLinks}
                     </ul>
                 </div>
-                <div className="navbar-end">
-                    <div className="dropdown dropdown-end">
-                        {
-                            loading ? (
-                                <div role="button" className=" w-12 h-12 md:mr-5 rounded-full overflow-hidden border-3  bg-transparent flex justify-center items-center border-primary">
-                                    <PuffLoader size={30} color='#ff6f61' />
+
+                {/* Navbar End: Auth & Theme */}
+                <div className="navbar-end gap-2">
+                    <div className="hidden md:flex items-center mr-2">
+                        <ThemeSwitcher />
+                    </div>
+
+                    {loading ? (
+                        <div className="btn btn-ghost btn-circle animate-pulse bg-base-200">
+                             <PuffLoader size={24} color="var(--color-primary)" />
+                        </div>
+                    ) : user ? (
+                        <div className="dropdown dropdown-end dropdown-hover">
+                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar border-2 border-primary/20 hover:border-primary p-0.5 transition-all">
+                                <div className="w-10 rounded-full">
+                                    <img src={user?.photoURL || avatar} alt="Profile" />
                                 </div>
-                            ) : user
-                                ? (
-                                    <div className="dropdown dropdown-end">
-                                        <div tabIndex={0} role="button" className=" w-12 h-12 md:mr-5 rounded-full overflow-hidden bg-white">
-                                            <img src={user?.photoURL || avatar} alt={user?.displayName} title={user?.displayName} className=' object-cover object-center w-full h-full scale-125 ' />
-                                        </div>
-                                        <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                            {eventLinks}
-                                        </ul>
-                                    </div>)
-                                : null
-                        }
-                    </div>
-                    {
-                        user
-                            ? <button onClick={handleLogOut} className="btn btn-accent hidden md:block "> Logout</button>
-                            : <Link to="/login" className="btn btn-primary "> Login</Link>
-                    }
-                    <div className='ml-3 hidden lg:block'>
-                        <ThemeSwitcher></ThemeSwitcher>
-                    </div>
-                </div>
-
-            </nav>
-            <div className="drawer-side">
-                <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-
-                <div className="menu bg-base-200 min-h-full w-80 p-4">
-                    <div className=''>
-                    </div>
-                    {
-                        loading ? (
-                            <div role="button" className=" w-12 h-12 md:mr-5 rounded-full overflow-hidden border-3  bg-transparent flex justify-center items-center border-primary">
-                                <PuffLoader size={30} color='#ff6f61' />
                             </div>
-                        ) : user
-                            ? (<>
-                                <div className="overflow-hidden w-full h-60 mb-2 bg-base-100/60 flex flex-col justify-center items-center rounded-2xl ">
-                                    <div className=' rounded-full w-25 h-25 mb-8 '>
-                                        <img src={user?.photoURL || avatar} alt={user?.displayName} title={user?.displayName} className=' object-cover object-center w-full h-full rounded-full scale-125 ' />
-                                    </div>
-                                    <p className='text-lg font-semibold'>{user?.displayName}</p>
-                                </div>
-
-                            </>)
-                            : null
-                    }
-                    {/* Sidebar content here */}
-                    <ul>
-                        {sidebarLinks}
-                        <ThemeSelector></ThemeSelector>
-                    </ul>
-                    {
-                        user?
-                        (<button onClick={handleLogOut} className="btn btn-sm bg-accent mt-10"> Logout</button>)
-                        : (<Link to="/login" className="btn btn-primary btn-sm mt-10 "> Login</Link>)
-                    }
-                    
+                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl bg-base-100 rounded-2xl w-60 border border-base-200 mt-2">
+                                {eventLinks}
+                            </ul>
+                        </div>
+                    ) : (
+                        <Link to="/login" className="btn btn-primary rounded-full px-8 font-heading shadow-md hover:shadow-primary/20 transition-all">
+                            Login
+                        </Link>
+                    )}
                 </div>
             </div>
-        </div>
+
+            {/* Sidebar / Drawer Side */}
+            <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+            <div className="drawer-side">
+                <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
+                <div className="menu p-6 w-80 min-h-full bg-base-100 text-base-content font-body">
+                    <div className="flex items-center gap-3 mb-10 px-2">
+                        <img src={logo} alt="Logo" className="h-8" />
+                        <span className="font-heading font-bold text-xl">Better Tomorrow</span>
+                    </div>
+
+                    {user && (
+                        <div className="flex flex-col items-center p-6 bg-base-200/50 rounded-3xl mb-6 text-center">
+                            <div className="avatar mb-3">
+                                <div className="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src={user?.photoURL || avatar} alt="user" />
+                                </div>
+                            </div>
+                            <h3 className="font-bold text-lg">{user?.displayName}</h3>
+                            <p className="text-xs text-base-content/60">{user?.email}</p>
+                        </div>
+                    )}
+
+                    <ul className="space-y-1">
+                        {/* Recursive or shared mobile links */}
+                        {navLinks}
+                        <div className="divider opacity-50"></div>
+                        {user && eventLinks}
+                    </ul>
+
+                    <div className="mt-auto space-y-4 pt-6">
+                        <ThemeSelector />
+                        {!user && <Link to="/login" className="btn btn-primary w-full rounded-xl">Login</Link>}
+                    </div>
+                </div>
+            </div>
+        </header>
     );
 };
 
