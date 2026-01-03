@@ -27,7 +27,7 @@ const Feature = () => {
   ];
 
   return (
-    <section className="py-24 bg-base-200/50">
+    <section className="py-24 bg-base-100">
       <div className="max-w-[1536px] mx-auto px-6 lg:px-12">
         
         {/* Section Header with "Portfolio" Styling */}

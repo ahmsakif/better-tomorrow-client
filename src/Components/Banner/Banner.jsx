@@ -27,7 +27,7 @@ const Banner = () => {
     };
 
     return (
-        <section className="relative w-full h-[85vh] min-h-[650px] overflow-hidden flex items-center bg-secondary">
+        <section className="relative w-full h-[75vh] min-h-[650px] overflow-hidden flex items-center bg-secondary">
             {/* Background Image with Framer Motion Fade-In */}
             <motion.div 
                 initial={{ scale: 1.1, opacity: 0 }}

@@ -1,67 +1,80 @@
 import React from 'react';
-import newsletterbg from '../../assets/newsletter.jpg'
-// Inline SVG for the arrow
+import { motion } from 'framer-motion';
+import newsletterbg from '../../assets/newsletter.jpg'; // We'll use this more subtly
+
 const ArrowIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
     <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
   </svg>
 );
 
 const NewsletterSection = () => {
-
   const handleSubscribe = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
-
-    alert(`Thank you for subscribing with ${email}!`);
+    // You could replace this with a beautiful Toast notification later
+    alert(`Success! ${email} is now part of the movement.`);
     e.target.reset();
   };
 
   return (
-    <section className="bg-primary/20 my-10 py-20 max-w-[1536px] px-4 mx-auto rounded">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          
-          <img 
-            src={newsletterbg}
-            alt="Community volunteers" 
-            className="w-full h-48 object-cover rounded-none mb-8"
-          />
+    <section className="py-24 bg-base-100">
+      <div className="max-w-[1536px] mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, type: "spring" }}
+          className="relative overflow-hidden bg-secondary rounded-[3rem] p-8 md:p-20 text-center"
+        >
+          {/* Subtle Background Decoration */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] -mr-32 -mt-32 rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 blur-[100px] -ml-32 -mb-32 rounded-full"></div>
 
+          <div className="relative z-10 max-w-3xl mx-auto">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              className="text-primary font-bold tracking-[0.3em] uppercase text-xs mb-6 block"
+            >
+              The Tomorrow Digest
+            </motion.span>
 
-          <h2 className="text-4xl font-bold mb-4">Subscribe to Our Newsletter</h2>
-          <p className="text-lg text-base-content text-opacity-80 max-w-2xl mx-auto mb-8">
-            Welcome to our newsletter hub, where we bring you the latest
-            happenings, exclusive content, and behind-the-scenes insights.
-          </p>
+            <h2 className="font-heading text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+              Stay ahead of the <br /> 
+              <span className="text-primary italic">positive change.</span>
+            </h2>
 
+            <p className="font-body text-lg text-white/70 max-w-xl mx-auto mb-10 leading-relaxed">
+              Join 5,000+ change-makers. Get exclusive insights into community impact and upcoming local events delivered to your inbox.
+            </p>
 
-          <form onSubmit={handleSubscribe} className="max-w-lg mx-auto">
-            <div className="join w-full rounded">
-              <input
-                type="email"
-                name="email"
-                placeholder="name@email.com"
-                className="input input-bordered join-item w-full rounded-l-md input-lg"
-                required
-              />
-              <button 
-                type="submit"
-                className="btn btn-primary join-item rounded-r-md btn-lg"
-              >
-                <span>Subscribe Now</span>
-                <ArrowIcon />
-              </button>
-            </div>
-          </form>
+            <form onSubmit={handleSubscribe} className="max-w-md mx-auto">
+              <div className="flex flex-col sm:flex-row gap-3 p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl sm:rounded-full">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  className="bg-transparent text-white placeholder:text-white/40 px-6 py-4 flex-grow outline-none font-body"
+                  required
+                />
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  type="submit"
+                  className="btn btn-primary rounded-2xl sm:rounded-full px-4 py-4 h-auto border-none shadow-lg shadow-primary/20 font-heading font-bold"
+                >
+                  Subscribe
+                  <ArrowIcon />
+                </motion.button>
+              </div>
+            </form>
 
-          <p className="text-sm text-base-content text-opacity-60 mt-4">
-            "Your information will never be shared with third parties, and you can
-            unsubscribe from our updates at any time."
-                    </p>
-          
-
-        </div>
+            <p className="font-body text-[10px] text-white/40 mt-6 uppercase tracking-widest">
+              No spam. Just impact. Unsubscribe anytime.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
