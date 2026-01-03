@@ -90,8 +90,7 @@ const Banner = () => {
                 </motion.div>
             </div>
             
-            {/* Smooth transition to the next section */}
-            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-base-100 to-transparent"></div>
+            
         </section>
     );
 };
