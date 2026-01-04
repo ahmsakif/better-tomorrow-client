@@ -13,6 +13,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { auth } from '../Firebase/firebase.config';
+import Loader from '../Components/Loader/Loader';
 
 const googleProvider = new GoogleAuthProvider()
 googleProvider.addScope('email')
@@ -100,7 +101,7 @@ const AuthProvider = ({ children }) => {
             {
                 !loading
                     ? children
-                    : <h1>Loading</h1>
+                    : <Loader />
             }
         </AuthContext>
     )
