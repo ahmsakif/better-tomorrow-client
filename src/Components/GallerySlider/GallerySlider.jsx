@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router';
 
 const Gallery = () => {
   const storyImages = [
@@ -46,12 +47,12 @@ const Gallery = () => {
         </div>
 
         <div className="mt-12 flex justify-center">
-            <button className="btn btn-ghost gap-2 hover:bg-primary/5 text-base-content/40 font-medium">
+            <Link to='/blogs' className="btn btn-ghost gap-2 hover:bg-primary/5 text-base-content/40 font-medium">
                 View All Stories 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
-            </button>
+            </Link>
         </div>
       </div>
     </section>

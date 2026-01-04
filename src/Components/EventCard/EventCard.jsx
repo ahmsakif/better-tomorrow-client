@@ -1,16 +1,16 @@
 import React from 'react';
 import { format } from "date-fns";
 import { Link } from 'react-router';
+import { motion } from 'framer-motion';
 import userAvatar from '../../assets/user.png'
 import { 
   IoLocationOutline, 
   IoCalendarOutline, 
-  IoTimeOutline,
-  IoTicketOutline
+  IoArrowForwardOutline,
+  IoPeopleOutline
 } from "react-icons/io5";
 
 const EventCard = ({ event }) => {
-
   const {
     _id,
     title,
@@ -20,78 +20,88 @@ const EventCard = ({ event }) => {
     location,
     eventDate,
     creatorName,
-    creatorPhotoURL
+    creatorPhotoURL,
+    participantsCount = 0 // Adding a metric for your statistics focus
   } = event;
 
-  const formattedDate = format(new Date(eventDate), "EEEE, dd MMMM, yyyy");
-  const formattedTime = format(new Date(eventDate), "hh:mm a");
+  const formattedDate = format(new Date(eventDate), "dd MMM, yyyy");
 
   return (
-    <div className="card max-w-lg bg-base-100 shadow-xl rounded overflow-hidden  transition-all duration-300 hover:shadow-2xl">
-      <figure className="relative h-80"> 
+    <motion.div 
+      whileHover={{ y: -10 }}
+      className="group bg-base-100 rounded-[2.5rem] border border-base-200 overflow-hidden flex flex-col h-full shadow-sm hover:shadow-2xl hover:border-primary/20 transition-all duration-500"
+    >
+      {/* 1. Image & Badge Area */}
+      <figure className="relative h-64 overflow-hidden"> 
         <img 
-          className="h-full w-full object-cover" 
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" 
           src={thumbnailUrl} 
           alt={title} 
           onError={(e) => { 
             e.target.onerror = null; 
-            e.target.src="https://placehold.co/600x400/3B3B3B/ffffff?text=Image+Not+Found";
+            e.target.src="https://placehold.co/600x400/1a4731/ffffff?text=Community+Event";
           }}
         />
-        <div className="badge badge-secondary absolute top-4 right-4 m-0 font-bold p-3">
-          {eventType}
+        <div className="absolute top-6 left-6 flex gap-2">
+            <span className="bg-white/90 backdrop-blur-md text-secondary font-bold text-[10px] uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
+                {eventType}
+            </span>
+        </div>
+        {/* Statistics Metric Badge */}
+        <div className="absolute bottom-6 right-6 bg-secondary/80 backdrop-blur-md text-white px-3 py-1.5 rounded-2xl flex items-center gap-2 text-xs font-bold">
+            <IoPeopleOutline className="text-lg" />
+            {participantsCount} Joined
         </div>
       </figure>
 
-      <div className="card-body p-6 flex flex-col"> 
-        
-        <div className="flex items-center gap-3 mb-3">
-          <div className="avatar">
-            <div className="w-10 h-10 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
-              {
-                !creatorPhotoURL
-                ? <img src={userAvatar} alt={creatorName} />
-                : <img src={creatorPhotoURL} alt={creatorName} />
-              }
-            </div>
-          </div>
-          <div>
-            <span className="text-sm text-base-content/70">Hosted by</span>
-            <h3 className="font-semibold text-base-content">{creatorName}</h3>
-          </div>
+      {/* 2. Content Area */}
+      <div className="p-8 flex flex-col flex-grow"> 
+        {/* Creator Info */}
+        <div className="flex items-center gap-3 mb-6">
+            <img 
+                src={creatorPhotoURL || userAvatar} 
+                alt={creatorName} 
+                className="w-8 h-8 rounded-full border border-primary/20 object-cover"
+            />
+            <span className="text-xs font-medium text-base-content/40 uppercase tracking-tighter">
+                By <span className="text-base-content/80">{creatorName}</span>
+            </span>
         </div>
 
-        <h2 className="card-title text-2xl font-bold mb-2 min-h-10  ">{title}</h2>
+        <h2 className="font-heading text-2xl font-black mb-3 group-hover:text-primary transition-colors line-clamp-1">
+            {title}
+        </h2>
 
-        <div className="flex flex-col gap-2 text-base-content/80 mb-2">
-          <div className="flex items-center gap-2">
-            <IoLocationOutline className="text-primary text-xl" />
-            <span className="font-medium">{location}</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <div className="flex items-center gap-2">
-              <IoCalendarOutline className="text-primary text-lg" />
-              <span>{formattedDate}</span>
+        {/* Details List */}
+        <div className="space-y-3 mb-6">
+            <div className="flex items-center gap-2 text-base-content/60 text-sm">
+                <IoCalendarOutline className="text-primary text-lg" />
+                <span className="font-body">{formattedDate}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <IoTimeOutline className="text-primary text-lg" />
-              <span>{formattedTime}</span>
+            <div className="flex items-center gap-2 text-base-content/60 text-sm">
+                <IoLocationOutline className="text-primary text-lg" />
+                <span className="font-body line-clamp-1">{location}</span>
             </div>
-          </div>
         </div>
 
-        <div className="text-base-content/90 flex-grow">
-          <p className="line-clamp-2">
+        <p className="font-body text-base-content/50 text-sm leading-relaxed line-clamp-2 mb-8 flex-grow">
             {description} 
-          </p>
+        </p>
+
+        {/* 3. Action Area */}
+        <div className="pt-6 border-t border-base-200">
+            <Link 
+                to={`/event/details/${_id}`} 
+                className="flex items-center justify-between group/btn text-secondary font-black font-heading uppercase text-sm tracking-widest hover:text-primary transition-colors"
+            >
+                View Details
+                <div className="w-10 h-10 rounded-full bg-secondary/5 group-hover/btn:bg-primary group-hover/btn:text-white transition-all flex items-center justify-center">
+                    <IoArrowForwardOutline className="text-xl" />
+                </div>
+            </Link>
         </div>
       </div>
-      <div className="justify-end w-full">
-          <Link to={`/event/details/${_id}`} className="btn btn-secondary border-none btn-block rounded-none text-lg h-14 hover:bg-linear-to-r from-primary to-secondary transition-all duration-500 ease-in-out ">
-            <IoTicketOutline className="text-xl" /> View Event Details
-          </Link>
-        </div>
-    </div>
+    </motion.div>
   );
 };
 

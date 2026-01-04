@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { IoLocationOutline, IoCalendarOutline, IoTimeOutline } from "react-icons/io5";
+import { 
+  IoLocationOutline, 
+  IoCalendarOutline, 
+  IoTimeOutline, 
+  IoCreateOutline, 
+  IoTrashOutline,
+  IoFingerPrintOutline 
+} from "react-icons/io5";
 import userAvatar from "../../assets/user.png";
 import EditEventModal from "../EditEventModal/EditEventModal";
-// import useAxios from "../../Hooks/useAxios";
 
 const ManageEventCard = ({ event, onUpdate, onDelete }) => {
-  // const axiosInstance = useAxios();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localEvent, setLocalEvent] = useState(event);
-  const [isLoading, setIsLoading] = useState(!event);
 
   useEffect(() => {
-    if (event) {
-      setLocalEvent(event);
-      setIsLoading(false);
-    }
+    if (event) setLocalEvent(event);
   }, [event]);
 
   const {
     _id,
     title,
-    description,
     eventType,
     thumbnailUrl,
     location,
@@ -31,113 +32,110 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
     creatorPhotoURL,
   } = localEvent;
 
-  const formattedDate = format(new Date(eventDate), "EEEE, dd MMMM, yyyy");
+  const formattedDate = format(new Date(eventDate), "dd MMM, yyyy");
   const formattedTime = format(new Date(eventDate), "hh:mm a");
 
   const handleUpdate = async (formData) => {
-
-    onUpdate(_id, formData)
-
+    onUpdate(_id, formData);
     setIsModalOpen(false);
   };
 
   const handleDelete = () => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Confirm Deletion",
+      text: "This action will permanently remove the record from the database.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3b82f6",
-      cancelButtonColor: "#ef4444",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#10b981", // Primary Emerald
+      cancelButtonColor: "#ef4444", // Error Red
+      confirmButtonText: "Confirm Delete",
+      background: 'white',
+      color: 'var(--text-base-content)',
+      customClass: {
+        popup: 'rounded-[2rem] border border-base-200 shadow-2xl font-body'
+      }
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await onDelete(_id)
-          if (response.deletedCount === 1) {
-            Swal.fire("Deleted!", "Your event has been deleted", "success")
-          } else {
-            Swal.fire("Failed!", "Event not found or already deleted.", "error");
+          const response = await onDelete(_id);
+          if (response?.deletedCount === 1) {
+             // Success handled by parent toast usually, but you can keep a secondary check
           }
         } catch (error) {
-          console.error("Deleted Failed:", error);
-          Swal.fire("Failed!", "Could not delete the event. Try again", "error")
+          console.error("Delete Failed:", error);
         }
       }
     });
   };
 
   return (
-    <div className="card max-w-lg bg-base-100 shadow-xl rounded overflow-hidden flex flex-col">
-      <figure className="relative h-64 md:h-72">
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="bg-base-100 border border-base-200 rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm hover:shadow-2xl hover:border-primary/20 transition-all duration-500 group"
+    >
+      {/* --- Image Section --- */}
+      <figure className="relative h-56 overflow-hidden">
         <img
-          className="h-full w-full object-cover"
-          src={
-            thumbnailUrl ||
-            "https://placehold.co/600x400/3B3B3B/ffffff?text=Image+Not+Found"
-          }
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          src={thumbnailUrl || "https://placehold.co/600x400/1a4731/ffffff?text=Event+Image"}
           alt={title}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src =
-              "https://placehold.co/600x400/3B3B3B/ffffff?text=Image+Not+Found";
-          }}
         />
-        <div className="badge badge-secondary absolute top-4 right-4 font-bold p-2 text-sm">
-          {eventType}
+        <div className="absolute top-4 left-4">
+          <span className="bg-white/90 backdrop-blur-md text-primary font-black text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-lg border border-primary/10">
+            {eventType}
+          </span>
+        </div>
+        {/* Event ID Badge for technical feel */}
+        <div className="absolute bottom-4 left-4 bg-black/40 backdrop-blur-md text-white/60 px-3 py-1 rounded-lg text-[9px] flex items-center gap-2 uppercase tracking-widest border border-white/10">
+            <IoFingerPrintOutline /> ID: {_id.slice(-6)}
         </div>
       </figure>
 
-      <div className="card-body p-4 flex flex-col gap-2">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="avatar">
-            <div className="w-10 h-10 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
-              <img src={creatorPhotoURL || userAvatar} alt={creatorName} />
-            </div>
+      {/* --- Body Section --- */}
+      <div className="p-8 flex flex-col flex-grow">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-full border border-primary/20 p-0.5">
+             <img src={creatorPhotoURL || userAvatar} alt={creatorName} className="rounded-full w-full h-full object-cover" />
           </div>
-          <div className="truncate">
-            <span className="text-xs text-base-content/70">Hosted by</span>
-            <h3 className="font-semibold text-base-content truncate">
-              {creatorName}
-            </h3>
-          </div>
+          <span className="text-[10px] font-bold text-base-content/40 uppercase tracking-widest">
+            Control Node: {creatorName}
+          </span>
         </div>
 
-        <h2 className="card-title text-lg md:text-xl font-bold mb-1 truncate">
+        <h2 className="font-heading text-xl font-black mb-4 tracking-tight line-clamp-1 group-hover:text-primary transition-colors">
           {title}
         </h2>
 
-        <div className="flex flex-col gap-1 text-base-content/80">
-          <div className="flex items-center gap-2 truncate">
-            <IoLocationOutline className="text-primary text-lg flex-shrink-0" />
+        <div className="space-y-3 mb-8 text-base-content/60 text-sm font-body">
+          <div className="flex items-center gap-2">
+            <IoLocationOutline className="text-primary text-lg" />
             <span className="truncate">{location}</span>
           </div>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-            <div className="flex items-center gap-1">
-              <IoCalendarOutline className="text-primary" />
-              <span>{formattedDate}</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+                <IoCalendarOutline className="text-primary" />
+                <span>{formattedDate}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <IoTimeOutline className="text-primary" />
-              <span>{formattedTime}</span>
+            <div className="flex items-center gap-2">
+                <IoTimeOutline className="text-primary" />
+                <span>{formattedTime}</span>
             </div>
           </div>
         </div>
 
-        <p className="text-base-content/90 line-clamp-3 mt-2">{description}</p>
-
-        <div className="mt-3 flex gap-2">
+        {/* --- Action Controls --- */}
+        <div className="mt-auto pt-6 border-t border-base-200 flex gap-3">
           <button
-            className="btn btn-primary flex-1"
             onClick={() => setIsModalOpen(true)}
+            className="flex-1 btn bg-primary/10 border-none text-primary hover:bg-primary hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] h-12 flex items-center gap-2 transition-all"
           >
-            Edit
+            <IoCreateOutline className="text-lg" /> Edit
           </button>
           <button
-            className="btn bg-red-400 text-base-100 flex-1"
             onClick={handleDelete}
+            className="btn btn-ghost bg-base-200/50 border-none text-error/60 hover:bg-error hover:text-white rounded-2xl px-5 h-12 transition-all"
           >
-            Delete
+            <IoTrashOutline className="text-xl" />
           </button>
         </div>
       </div>
@@ -150,7 +148,8 @@ const ManageEventCard = ({ event, onUpdate, onDelete }) => {
         onUpdate={handleUpdate}
         minDate={new Date().toISOString().slice(0, 16)}
       />
-    </div>
+    </motion.div>
   );
 };
+
 export default ManageEventCard;

@@ -16,13 +16,13 @@ const Feature = () => {
       icon: <PlusIcon />,
       title: "Lead Your Initiative",
       description: "Have an idea for a clean-up drive or a donation camp? Post your own event in minutes and invite others to join your cause.",
-      link: "/event/create"
+      link: "/dashboard/create"
     },
     {
       icon: <ChartIcon />,
       title: "Track Your Impact",
       description: "See a complete history of all the events you've joined and organized. Watch your contribution to a better tomorrow grow over time.",
-      link: "/event/manage"
+      link: "/dashboard/manage"
     }
   ];
 

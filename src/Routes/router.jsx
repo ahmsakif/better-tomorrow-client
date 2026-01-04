@@ -15,63 +15,64 @@ import Profile from '../Components/Profile/Profile';
 import PrivateRoute from './PrivateRoute';
 import Error404 from '../Pages/ErrorPages/Error404';
 import AboutPage from '../Pages/About/AboutPage';
+import DashboardLayout from '../Layout/DashboardLayout';
+import ImpactOverview from '../Components/ImpactOverview/ImpactOverview';
+import Blogs from '../Pages/Blogs/Blogs';
+import WriteBlog from '../Components/WriteBlog/WriteBlog';
+import BlogDetails from '../Pages/Blogs/BlogDetails';
+import Privacy from '../Pages/LegalPages/Privacy';
+import Terms from '../Pages/LegalPages/Terms';
 
 const router = createBrowserRouter([
     {
         path: "/",
         Component: HomeLayout,
-        hydrateFallbackElement: <p>Loading</p>,
         children: [
-            {
-                index: true,
-                Component: Home,
-            },
-            {
-                path: 'events',
-                Component: Events,
-            },
-            {
-                path: 'event/create',
-                element: <PrivateRoute><CreateEvent></CreateEvent></PrivateRoute>
-            },
-            {
-                path: 'event/manage',
-                element: <PrivateRoute><ManageEvents></ManageEvents></PrivateRoute>
-            },
-            {
-                path: 'event/joined',
-                element: <PrivateRoute><JoinedEvents></JoinedEvents></PrivateRoute>
-            },
-            {
-                path: 'profile',
-                element: <PrivateRoute><Profile></Profile></PrivateRoute>
-            },
-            {
-                path: 'event/details/:id',
-                Component: EventDetails,
-            },
-            {
-                path: 'about',
-                Component: AboutPage,
-            }
+            { index: true, Component: Home },
+            { path: 'events', Component: Events },
+            { path: 'event/details/:id', Component: EventDetails },
+            { path: 'blogs', Component: Blogs },
+            { path: 'blog/:id', Component: BlogDetails },
+            { path: 'about', Component: AboutPage },
+            { path: 'privacy', Component: Privacy },
+            { path: 'terms', Component: Terms },
         ]
     },
     {
-        path: '/login',
-        Component: Login,
+        // New Root Dashboard Route
+        path: "/dashboard",
+        element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
+        children: [
+            {
+                index: true, // This is /dashboard
+                element: <ImpactOverview />
+            },
+            {
+                path: 'joined', // This is /dashboard/joined
+                element: <JoinedEvents />
+            },
+            {
+                path: 'manage', // This is /dashboard/manage
+                element: <ManageEvents />
+            },
+            {
+                path: 'create', // This is /dashboard/create
+                element: <CreateEvent />
+            },
+            {
+                path: 'profile',
+                element: <Profile />
+            },
+            {
+                path: 'write-blog',
+                element: <WriteBlog />
+            }
+        ]
     },
-    {
-        path: '/register',
-        Component: Register,
-    },
-    {
-        path: '/forgot-password',
-        Component: ForgotPassword,
-    },
-    {
-        path: '/*',
-        Component: Error404,
-    },
+    { path: '/login', Component: Login },
+    { path: '/register', Component: Register },
+    { path: '/forgot-password', Component: ForgotPassword },
+    { path: '/*', Component: Error404 },
 ])
 
 export default router;

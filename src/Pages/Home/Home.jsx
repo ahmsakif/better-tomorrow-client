@@ -6,6 +6,7 @@ import Gallery from '../../Components/GallerySlider/GallerySlider';
 import ImpactStats from '../../Components/ImpactStats/ImpactStats';
 import Testimonials from '../../Components/Testimonials/Testimonials';
 import FAQ from '../../Components/FAQ/FAQ';
+import ImpactStories from '../../Components/ImpactStories/ImpactStories';
 
 const Home = () => {
 
@@ -17,6 +18,7 @@ const Home = () => {
             <Gallery></Gallery>
             <Testimonials></Testimonials>
             <FAQ></FAQ>
+            <ImpactStories></ImpactStories>
             <NewsletterSection></NewsletterSection>
         </div>
     );

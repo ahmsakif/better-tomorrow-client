@@ -74,8 +74,9 @@ const Footer = () => {
                         <ul className='space-y-4 font-body text-white/50'>
                             <li><Link to='/' className='hover:text-primary transition-colors'>Home</Link></li>
                             <li><Link to='/events' className='hover:text-primary transition-colors'>All Events</Link></li>
-                            <li><Link to='/gallery' className='hover:text-primary transition-colors'>Gallery</Link></li>
+                            {/* <li><Link to='/gallery' className='hover:text-primary transition-colors'>Gallery</Link></li> */}
                             <li><Link to='/blogs' className='hover:text-primary transition-colors'>Stories</Link></li>
+                            <li><Link to='/about' className='hover:text-primary transition-colors'>About</Link></li>
                         </ul>
                     </div>
 
@@ -95,8 +96,8 @@ const Footer = () => {
                     <div className='col-span-2 md:col-span-1'>
                         <h2 className='font-heading text-lg font-bold text-white mb-8 tracking-widest uppercase'>Legal</h2>
                         <ul className='space-y-4 font-body text-white/50'>
-                            <li><Link className='hover:text-primary transition-colors'>Privacy</Link></li>
-                            <li><Link className='hover:text-primary transition-colors'>Terms</Link></li>
+                            <li><Link to='/privacy' className='hover:text-primary transition-colors'>Privacy</Link></li>
+                            <li><Link to="/terms" className='hover:text-primary transition-colors'>Terms</Link></li>
                         </ul>
                     </div>
                 </div>

@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaFacebookF, FaApple, FaRegEnvelope, FaEyeSlash, FaEye, FaLock } from 'react-icons/fa';
+import { 
+  FaRegEnvelope, 
+  FaEyeSlash, 
+  FaEye, 
+  FaLock, 
+  FaUserFriends 
+} from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import loginBg from '../../assets/register-bg.jpg'
+import loginBg from '../../assets/register-bg.jpg';
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import { handleFirebaseSuccess } from '../../Utilities/handleFirebaseSuccess';
@@ -10,33 +16,43 @@ import useAxios from '../../Hooks/useAxios';
 import Loader from '../../Components/Loader/Loader';
 
 const Login = () => {
-
-
   const {
     signInUser,
     signInWithGoogle,
     setLoading,
     user,
     loading,
-  } = useAuth()
+  } = useAuth();
 
-  const axiosInstance = useAxios()
-
-  const [showPwd, setShowPwd] = useState(false)
+  const axiosInstance = useAxios();
+  const [showPwd, setShowPwd] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate()
-  const emailRef = useRef()
+  const navigate = useNavigate();
+  
+  const emailRef = useRef();
 
   useEffect(() => {
-    if(user){
-      navigate('/', {replace: true})
+    if (user) {
+      navigate('/', { replace: true });
     }
-  })
-  
+  }, [user, navigate]);
+
+  // Mandatory Criteria: Demo Credential Function
+  const handleDemoLogin = () => {
+    const demoEmail = "user@demo.com";
+    const demoPass = "Demo123456";
+    
+    if (emailRef.current) emailRef.current.value = demoEmail;
+    const passwordInput = document.getElementsByName('password')[0];
+    if (passwordInput) passwordInput.value = demoPass;
+    
+    handleFirebaseSuccess("demo-filled");
+  };
+
   const handleSignIn = (e) => {
-    e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
     if (!email || !password) {
       handleFirebaseError("auth/missing-fields");
@@ -45,153 +61,149 @@ const Login = () => {
 
     signInUser(email, password)
       .then((user) => {
-        console.log(user);
-        e.target.reset()
-        handleFirebaseSuccess("login")
+        e.target.reset();
+        handleFirebaseSuccess("login");
         const from = location?.state?.from?.pathname || "/";
-        navigate(from, { replace: true })
-        setLoading(false)
+        navigate(from, { replace: true });
+        setLoading(false);
       })
       .catch(error => {
-        handleFirebaseError(error.code)
-        setLoading(false)
-      })
-  }
+        handleFirebaseError(error.code);
+        setLoading(false);
+      });
+  };
 
   const handleGoogleSignIn = () => {
     signInWithGoogle()
       .then((result) => {
-        const user = result.user
+        const user = result.user;
         const newUser = {
           name: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
-        }
-        // create user in database
-        axiosInstance.post('/users', newUser)
-          .then(data => {
-            console.log(data.data);
-          })
-        setLoading(false)
-        handleFirebaseSuccess("google-login")
+        };
+        axiosInstance.post('/users', newUser);
+        setLoading(false);
+        handleFirebaseSuccess("google-login");
         const from = location?.state?.from?.pathname || "/";
-        navigate(from, { replace: true })
+        navigate(from, { replace: true });
       })
       .catch(error => {
-        handleFirebaseError(error.code)
-        setLoading(false)
-      })
-  }
+        handleFirebaseError(error.code);
+        setLoading(false);
+      });
+  };
 
-
-
-  const handleShowPwd = (e) => {
-    e.preventDefault()
-    setShowPwd(!showPwd)
-  }
-
-  if(loading) return <Loader></Loader>
+  if (loading) return <Loader></Loader>;
 
   return (
-    <div className="flex min-h-screen bg-white">
-      {/* Left Side: Logo and Banner */}
-      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden lg:flex">
-        <img src={loginBg} className='h-full w-full overflow-hidden object-cover ' alt="" />
-        <div class="absolute top-1/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white p-4 bg-black/30 py-10 px-20 w-4/5 rounded-2xl">
-          <h1 className='text-4xl font-bold text-center mb-6'>Better Tomorrow</h1>
-          <p className='text-center text-xl'>Explore Events. Make Connections. Create Memories.</p>
+    // Fixed height container prevents overall page scroll
+    <div className="flex h-screen overflow-hidden bg-base-100">
+      
+      {/* Left Side: Professional Banner */}
+      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden lg:flex border-r border-base-200">
+        <img src={loginBg} className='h-full w-full object-cover' alt="Banner" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white p-12 bg-black/40 backdrop-blur-md w-4/5 rounded-[3rem] border border-white/10 text-center">
+          <h1 className='text-5xl font-black mb-6 italic tracking-tighter'>Better Tomorrow</h1>
+          <p className='text-xl font-body opacity-80 leading-relaxed'>
+            Connecting volunteers with communities across every corner of Bangladesh.
+          </p>
         </div>
       </div>
 
-      {/* Right Side: Login Form */}
-      <div className="flex w-full items-center justify-center p-8 lg:w-1/2 bg-base-100">
-        <div className="w-full max-w-md">
-          <h2 className="mb-4 text-3xl font-semibold text-base-content">
-            Welcome Back
-          </h2>
-          <p className="mb-8 text-base-content">
-            Connecting volunteers with communities in need across every corner of Bangladesh.
-          </p>
+      {/* Right Side: Form Module with Internal Scroll */}
+      <div className="flex w-full h-full items-center justify-center p-8 lg:w-1/2 bg-base-100 overflow-y-auto custom-scrollbar">
+        <div className="w-full max-w-md py-10">
+          <div className="mb-10">
+            <h2 className="text-4xl font-black font-heading tracking-tight mb-2 text-base-content">
+              Welcome Back
+            </h2>
+            <p className="text-base-content/50 text-sm font-medium uppercase tracking-widest">
+              Access your management console
+            </p>
+          </div>
 
-          <form onSubmit={handleSignIn}>
-            {/* Email Input */}
-            <div className="mb-4">
-              <label htmlFor="email" className="mb-2 block text-sm font-medium text-base-content">
-                Email
-              </label>
+          <form onSubmit={handleSignIn} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-widest opacity-40 ml-2">Email Address</label>
               <div className="relative">
                 <input
                   required
                   type="email"
-                  id="email"
                   name="email"
                   ref={emailRef}
-                  placeholder="mail@mail.com"
-                  className="w-full rounded-lg border border-gray-300 p-3 pl-10 focus:border-secondary focus:outline-none focus:ring-1 focus:ring-secondary"
+                  placeholder="mail@example.com"
+                  className="w-full rounded-2xl border border-base-300 bg-base-200/30 p-4 pl-12 focus:border-primary outline-none font-bold transition-all"
                 />
-                <FaRegEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <FaRegEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/30 text-lg" />
               </div>
             </div>
 
-            {/* Password Input */}
-            <div className="relative">
-              <input
-                required
-                type={showPwd ? "text" : "password"}
-                id="password"
-                name="password"
-                placeholder="password"
-                className="w-full rounded-lg border border-gray-300 p-3 pl-10 focus:border-secondary focus:outline-none focus:ring-1 focus:ring-secondary"
-              />
-              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              {
-                showPwd
-                  ? <button onClick={handleShowPwd}><FaEye className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" /></button>
-                  : <button onClick={handleShowPwd} ><FaEyeSlash className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" /></button>
-              }
-
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-widest opacity-40 ml-2">Password</label>
+              <div className="relative">
+                <input
+                  required
+                  type={showPwd ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  className="w-full rounded-2xl border border-base-300 bg-base-200/30 p-4 pl-12 focus:border-primary outline-none font-bold transition-all"
+                />
+                <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/30 text-lg" />
+                <button 
+                  type="button"
+                  onClick={() => setShowPwd(!showPwd)} 
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-base-content/30 hover:text-primary transition-colors"
+                >
+                  {showPwd ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
+                </button>
+              </div>
             </div>
 
-            {/* Forgot Password */}
-            <div className="mb-6 text-right">
-              <Link to="/forgot-password" className="text-sm font-medium text-blue-600 hover:underline">
+            <div className="text-right">
+              <Link to="/forgot-password" size="sm" className="text-xs font-bold text-primary hover:underline uppercase tracking-tighter">
                 Forgot Password?
               </Link>
             </div>
 
-            {/* Sign In Button */}
             <button
               type="submit"
-              className="w-full rounded-lg bg-secondary py-3 px-4 text-center font-semibold text-white shadow-md transition duration-200 hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+              className="btn btn-primary btn-block h-16 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20"
             >
               Sign In
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="my-8 flex items-center">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <span className="mx-4 text-sm text-gray-500">or sign in with</span>
-            <div className="flex-grow border-t border-gray-300"></div>
+          {/* Single Full-Width Google Option */}
+          <div className="my-10 flex items-center gap-4 opacity-20">
+            <div className="flex-grow border-t border-base-content"></div>
+            <span className="text-[10px] font-black uppercase tracking-widest">Or Login With</span>
+            <div className="flex-grow border-t border-base-content"></div>
           </div>
 
-          {/* Social Logins */}
-          <div className="flex justify-center gap-4">
-            <button onClick={handleGoogleSignIn} className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 text-xl text-gray-500 transition duration-200 hover:bg-gray-50">
-              <FcGoogle />
+          <div className="space-y-4">
+            <button 
+              onClick={handleGoogleSignIn} 
+              className="btn btn-outline border-base-300 w-full h-14 rounded-2xl font-bold flex items-center justify-center gap-4 hover:bg-base-200 shadow-sm"
+            >
+              <FcGoogle size={24}/>
+              <span className="uppercase text-xs tracking-widest">Continue with Google</span>
             </button>
-            <button className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 text-xl text-blue-600 transition duration-200 hover:bg-gray-50">
-              <FaFacebookF />
-            </button>
-            <button className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 text-xl text-gray-500 transition duration-200 hover:bg-gray-50">
-              <FaApple />
+
+            {/* Mandatory Criteria: Demo Credentials Button */}
+            <button 
+              type="button"
+              onClick={handleDemoLogin} 
+              className="w-full flex items-center justify-center gap-2 p-4 bg-primary/10 border border-primary/20 rounded-2xl hover:bg-primary/20 transition-all text-xs font-black uppercase tracking-widest text-primary"
+            >
+              <FaUserFriends /> Quick Demo Access
             </button>
           </div>
 
-          {/* Sign Up Link */}
-          <p className="mt-8 text-center text-gray-600">
-            Don't have an account?{' '}
-            <Link to='/register' className="font-semibold text-blue-600 hover:underline">
+          <p className="mt-10 text-center text-sm font-body text-base-content/50">
+            New to the movement?{' '}
+            <Link to='/register' className="font-black text-primary hover:underline uppercase tracking-tighter ml-1">
               Sign Up
             </Link>
           </p>
